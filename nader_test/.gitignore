@@ -1,0 +1,9 @@
+# دیتابیس محلی SQLite (نباید در مخزن ثبت شود)
+people.db
+people.db-shm
+people.db-wal
+*.db-journal
+
+# خروجی‌های ساخت
+bin/
+obj/

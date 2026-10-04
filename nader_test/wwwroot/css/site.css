@@ -1,22 +1,163 @@
+/* تنظیمات ظاهری دفترچه افراد - چیدمان راست‌به‌چپ */
+
+:root {
+    --app-primary: #0d6efd;
+    --app-primary-dark: #0a58ca;
+}
+
 html {
-  font-size: 14px;
+    font-size: 15px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: Vazirmatn, Tahoma, "Segoe UI", "Iranian Sans", sans-serif;
+    margin-bottom: 70px;
+    background-color: #f5f7fa;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(13, 110, 253, .35);
+}
+
+.navbar-brand {
+    font-size: 1.15rem;
+}
+
+.nav-link.active {
+    color: var(--app-primary) !important;
+}
+
+/* کارت‌ها */
+.card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, .08), 0 1px 2px rgba(16, 24, 40, .04);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eef1f5;
+    font-weight: 600;
+}
+
+/* جدول‌ها */
+.table > :not(caption) > * > * {
+    vertical-align: middle;
+}
+
+.table thead th {
+    background-color: #f8f9fc;
+    color: #475467;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* کارت‌های آماری گزارش */
+.stat-card {
+    border-radius: .6rem;
+    padding: 1rem 1.15rem;
+    background: #fff;
+    border-right: 4px solid var(--app-primary);
+    height: 100%;
+}
+
+.stat-card .stat-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #101828;
+}
+
+.stat-card .stat-label {
+    color: #667085;
+    font-size: .875rem;
+}
+
+/* اعداد فارسی */
+/* توجه: از font-feature-settings استفاده نمی‌کنیم؛ در بعضی فونت‌ها/موتورها
+   می‌تواند باعث جانشینی گلیف ناخواسته شود. ترتیب فونت‌ها هم عمداً فونت‌های
+   دارای گلیف ارقام فارسی (U+06F0–U+06F9) را در اولویت قرار می‌دهد. */
+.fa-num {
+    font-family: Tahoma, "Segoe UI", "Iranian Sans", "Times New Roman", serif;
+}
+
+/* نوار پیشرفت گزارش گروهی */
+.report-bar {
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.report-bar > span {
+    display: block;
+    height: 100%;
+    background-color: var(--app-primary);
+    border-radius: 4px;
+}
+
+/* فرم‌ها */
+.form-label {
+    font-weight: 500;
+    color: #344054;
+}
+
+.form-control:focus {
+    border-color: var(--app-primary);
+}
+
+.required-mark {
+    color: #d92d20;
+}
+
+/* صفحه‌بندی */
+.pagination .page-link {
+    cursor: pointer;
+}
+
+/* فوتر */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background-color: #fff;
+}
+
+/* حالت خالی */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #667085;
+}
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: .75rem;
+}
+
+/* چاپ */
+@media print {
+    .navbar, .footer, .no-print {
+        display: none !important;
+    }
+
+    body {
+        background-color: #fff;
+        margin-bottom: 0;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
 }

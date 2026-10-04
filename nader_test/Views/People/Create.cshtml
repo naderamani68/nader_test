@@ -1,0 +1,71 @@
+@model Person
+@{
+    ViewData["Title"] = "ثبت فرد جدید";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">فهرست افراد</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ثبت فرد جدید</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-7">
+        <div class="card">
+            <div class="card-header">➕ اطلاعات فرد جدید</div>
+            <div class="card-body">
+                <form asp-action="Create" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label asp-for="FirstName" class="form-label">
+                                نام <span class="required-mark">*</span>
+                            </label>
+                            <input asp-for="FirstName" class="form-control" placeholder="مثال: علی" autofocus />
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="LastName" class="form-label">
+                                نام خانوادگی <span class="required-mark">*</span>
+                            </label>
+                            <input asp-for="LastName" class="form-control" placeholder="مثال: رضایی" />
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="NationalCode" class="form-label">
+                                کد ملی <span class="required-mark">*</span>
+                            </label>
+                            <input asp-for="NationalCode" class="form-control fa-num" inputmode="numeric"
+                                   maxlength="10" placeholder="۱۰ رقم" />
+                            <span asp-validation-for="NationalCode" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label">
+                                شماره تماس <span class="required-mark">*</span>
+                            </label>
+                            <input asp-for="PhoneNumber" class="form-control fa-num" inputmode="numeric"
+                                   maxlength="11" placeholder="مثال: 09121234567" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">💾 ذخیره</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,161 @@
+@model ReportViewModel
+@{
+    ViewData["Title"] = "گزارش‌ها";
+
+    string Fa(long number) => number.ToString()
+        .Replace('0', '۰').Replace('1', '۱').Replace('2', '۲').Replace('3', '۳').Replace('4', '۴')
+        .Replace('5', '۵').Replace('6', '۶').Replace('7', '۷').Replace('8', '۸').Replace('9', '۹');
+
+    var maxInitial = Model.ByLastNameInitial.Count > 0 ? Model.ByLastNameInitial.Max(x => x.Count) : 1;
+    var maxDay = Model.ByDay.Count > 0 ? Model.ByDay.Max(x => x.Count) : 1;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h1 class="h4 mb-1">گزارش‌ها</h1>
+        <p class="text-muted mb-0 small">
+            تاریخ گزارش: <span class="fa-num">@DateTime.Now.ToString("yyyy/MM/dd HH:mm")</span>
+        </p>
+    </div>
+    <div class="d-flex gap-2 no-print">
+        <a class="btn btn-success"
+           asp-action="ExportExcel" asp-route-search="@Model.Search">📥 خروجی Excel</a>
+        <button type="button" class="btn btn-outline-secondary" onclick="window.print()">🖨 چاپ</button>
+        <a class="btn btn-outline-primary" asp-controller="People" asp-action="Index">فهرست افراد</a>
+    </div>
+</div>
+
+@* ---- کارت‌های آماری ---- *@
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-value fa-num">@Fa(Model.TotalPeople)</div>
+            <div class="stat-label">تعداد کل افراد</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-value fa-num">@Fa(Model.AddedLast7Days)</div>
+            <div class="stat-label">ثبت‌شده در ۷ روز گذشته</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-value fa-num">@Fa(Model.EditedCount)</div>
+            <div class="stat-label">ویرایش‌شده</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-value fa-num">@Fa(Model.DistinctLastNames)</div>
+            <div class="stat-label">نام خانوادگی متمایز</div>
+        </div>
+    </div>
+</div>
+
+@if (Model.TotalPeople == 0)
+{
+    <div class="card">
+        <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <p class="mb-2">برای ساخت گزارش، ابتدا چند فرد ثبت کنید.</p>
+            <a class="btn btn-sm btn-primary" asp-controller="People" asp-action="Create">ثبت فرد جدید</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @* ---- گزارش به تفکیک حرف اول نام خانوادگی ---- *@
+        <div class="col-12 col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">تعداد افراد به تفکیک حرف اول نام خانوادگی</div>
+                <div class="card-body">
+                    @foreach (var item in Model.ByLastNameInitial)
+                    {
+                        var percent = maxInitial == 0 ? 0 : (int)Math.Round(item.Count * 100.0 / maxInitial);
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-semibold">@item.Title</span>
+                                <span class="badge text-bg-light fa-num">@Fa(item.Count) نفر</span>
+                            </div>
+                            <div class="report-bar">
+                                <span style="width:@percent%"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @* ---- گزارش ثبت‌نام ۱۴ روز گذشته ---- *@
+        <div class="col-12 col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">ثبت‌نام در ۱۴ روز گذشته</div>
+                <div class="card-body">
+                    <div class="table-responsive" style="max-height:420px;overflow-y:auto">
+                        <table class="table table-sm table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th style="width:120px">تعداد</th>
+                                    <th>نمودار</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ByDay)
+                                {
+                                    var percent = maxDay == 0 ? 0 : (int)Math.Round(item.Count * 100.0 / maxDay);
+                                    <tr>
+                                        <td class="fa-num small">@item.Title</td>
+                                        <td class="fa-num">@Fa(item.Count)</td>
+                                        <td>
+                                            <div class="report-bar">
+                                                <span style="width:@percent%"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ---- آخرین افراد ثبت‌شده ---- *@
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">آخرین افراد ثبت‌شده</div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ردیف</th>
+                                <th>نام</th>
+                                <th>نام خانوادگی</th>
+                                <th>کد ملی</th>
+                                <th>شماره تماس</th>
+                                <th>تاریخ ثبت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var row = 1; }
+                            @foreach (var person in Model.RecentPeople)
+                            {
+                                <tr>
+                                    <td class="text-muted fa-num">@Fa(row++)</td>
+                                    <td>@person.FirstName</td>
+                                    <td class="fw-semibold">@person.LastName</td>
+                                    <td class="fa-num">@person.NationalCode</td>
+                                    <td class="fa-num">@person.PhoneNumber</td>
+                                    <td class="fa-num small text-muted">@person.CreatedAt.ToString("yyyy/MM/dd HH:mm")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}

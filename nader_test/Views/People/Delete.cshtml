@@ -1,0 +1,47 @@
+@model Person
+@{
+    ViewData["Title"] = "حذف فرد";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">فهرست افراد</a></li>
+        <li class="breadcrumb-item active" aria-current="page">حذف «@Model.FullName»</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-7">
+        <div class="card border-danger">
+            <div class="card-header text-danger">⚠️ تأیید حذف</div>
+            <div class="card-body">
+                <p class="mb-3">
+                    آیا از حذف اطلاعات <strong>«@Model.FullName»</strong> مطمئن هستید؟
+                    این عملیات قابل بازگشت نیست.
+                </p>
+
+                <dl class="row mb-4 bg-light p-3 rounded">
+                    <dt class="col-sm-4">نام</dt>
+                    <dd class="col-sm-8">@Model.FirstName</dd>
+
+                    <dt class="col-sm-4">نام خانوادگی</dt>
+                    <dd class="col-sm-8">@Model.LastName</dd>
+
+                    <dt class="col-sm-4">کد ملی</dt>
+                    <dd class="col-sm-8 fa-num">@Model.NationalCode</dd>
+
+                    <dt class="col-sm-4">شماره تماس</dt>
+                    <dd class="col-sm-8 fa-num">@Model.PhoneNumber</dd>
+                </dl>
+
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">🗑 بله، حذف کن</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
